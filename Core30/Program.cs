@@ -1,7 +1,7 @@
 ﻿using Natasha;
 using System;
 
-namespace Core21
+namespace Core30
 {
     class Program
     {
@@ -15,12 +15,8 @@ namespace Core21
              *      <PreserveCompilationContext>true</PreserveCompilationContext>
              */
 
-            string text = @"using System;
-using System.Collections;
-using System.Linq;
-using System.Text;
- 
-namespace HelloWorld
+
+            string text = @"namespace HelloWorld
 {
     public class Test
     {
@@ -35,7 +31,7 @@ namespace HelloWorld
             //根据脚本创建动态类
             Type type = ClassBuilder.GetType(text);
             //创建动态类实例代理
-            DynamicOperator instance = new DynamicOperator(type);
+            DynamicOperator instance = type;
 
             if (instance["Name"].StringValue == "111")
             {
@@ -45,7 +41,9 @@ namespace HelloWorld
             //调用动态类
             Console.WriteLine(instance["Name"].StringValue);
 
-
+            TestB b = new TestB();
+            b.Name = "abc";
+            var result = CloneOperator.Clone(b);
 
 
             //创建动态类实例代理
