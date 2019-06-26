@@ -8,4 +8,10 @@
     <ProjectReference Include="..\Natasha\Natasha.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Text.Json">
+      <HintPath>C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\3.0.0-preview6-27804-01\ref\netcoreapp3.0\System.Text.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

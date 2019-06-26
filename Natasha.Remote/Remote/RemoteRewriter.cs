@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Natasha.Remote
 {
@@ -16,8 +16,8 @@ namespace Natasha.Remote
 
         static RemoteWritter()
         {
-            Serialization = "JsonConvert.SerializeObject";
-            Deserialization = "JsonConvert.DeserializeObject";
+            Serialization = "JsonSerializer.ToString";
+            Deserialization = "JsonSerializer.Parse";
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Natasha.Remote
 
                     RemoteReader._func_mapping[className][item.Name] = FastMethodOperator.New
                             .Using(type)
-                            .Using(typeof(JsonConvert))
+                            .Using(typeof(JsonSerializer))
                             .Param<TransportParameters>("parameters")
                             .MethodBody($@"{sb}{className} instance = new {className}();return {Serialization}(instance.{call}));")
                             .Return<string>()

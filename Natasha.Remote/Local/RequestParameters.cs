@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Natasha.Remote
 {
@@ -71,7 +71,7 @@ namespace Natasha.Remote
         /// <returns></returns>
         public RequestParameters Params<T>(T instance)
         {
-            Parameters[_current_name] = JsonConvert.SerializeObject(instance);
+            Parameters[_current_name] = JsonSerializer.ToString(instance);
             return this;
         }
     }
@@ -202,7 +202,7 @@ namespace Natasha.Remote
             //{
              //   return value.ToString();
            // }
-            return JsonConvert.SerializeObject(value); 
+            return JsonSerializer.ToString(value); 
         }
     }
 
