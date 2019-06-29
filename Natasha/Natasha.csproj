@@ -30,7 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.6.0-preview6.19303.8" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0-preview1-24530-04" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
