@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Natasha.Template;
+using System;
 
 namespace Natasha
 {
     /// <summary>
     /// 类构建器
     /// </summary>
-    public class ClassBuilder : ClassContentTemplate<ClassBuilder>
+    public class OopBuilder : OopContentTemplate<OopBuilder>
     {
 
-        public readonly ClassComplier ComplierOption;
+        public readonly OopComplier Complier;
         public CtorTemplate CtorBuilder;
 
 
-        public ClassBuilder()
+        public OopBuilder()
         {
 
-            ComplierOption = new ClassComplier();
+            Complier = new OopComplier();
             Link = this;
 
         }
@@ -28,7 +29,7 @@ namespace Natasha
         /// </summary>
         /// <param name="action">构建委托</param>
         /// <returns></returns>
-        public ClassBuilder Ctor(Action<CtorTemplate> action)
+        public OopBuilder Ctor(Action<CtorTemplate> action)
         {
 
             action(CtorBuilder = new CtorTemplate());
@@ -45,15 +46,15 @@ namespace Natasha
         /// 构建脚本
         /// </summary>
         /// <returns></returns>
-        public override ClassBuilder Builder()
+        public override OopBuilder Builder()
         {
 
             _script.Clear();
 
             if (CtorBuilder != null)
             {
-
-                ClassBody(CtorBuilder.Builder()._script);
+                CtorBuilder.Name(OopNameScript);
+                OopBody(CtorBuilder.Builder()._script);
 
             }
 
@@ -73,9 +74,23 @@ namespace Natasha
         /// <returns></returns>
         public Type GetType(int classIndex = 1, int namespaceIndex = 1)
         {
-            
-            return  RuntimeComplier.GetClassType(Builder().Script, classIndex, namespaceIndex);
+            switch (OopTypeEnum)
+            {
 
+                case OopType.Class:
+
+                    return Complier.GetClassType(Builder().Script, classIndex, namespaceIndex);
+
+                case OopType.Struct:
+
+                    return Complier.GetStructType(Builder().Script, classIndex, namespaceIndex);
+
+                case OopType.Interface:
+
+                    return Complier.GetInterfaceType(Builder().Script, classIndex, namespaceIndex);
+            }
+
+            return null;
         }
 
     }

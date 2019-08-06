@@ -1,37 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace Natasha
+namespace Natasha.Template
 {
     public class MemberAttributeTemplate<T> : TemplateRecoder<T>
     {
-        public readonly StringBuilder AttributeScript;
 
-        public T Attribute<A>(string ctorInfo=default)
+        public readonly StringBuilder MemberAttributeScript;
+
+        public MemberAttributeTemplate() => MemberAttributeScript = new StringBuilder();
+
+
+
+
+        public T MemberAttribute(string attrInfo = default)
         {
-            return Attribute(typeof(A), ctorInfo);
+
+            MemberAttributeScript.AppendLine(attrInfo);
+            return Link;
+
         }
 
-        public T Attribute(Type type,string ctorInfo = default)
+
+
+
+        public T MemberAttribute<A>(string ctorInfo=default)
         {
+
+            return MemberAttribute(typeof(A), ctorInfo);
+
+        }
+
+
+
+
+        public T MemberAttribute(Type type,string ctorInfo = default)
+        {
+
             UsingRecoder.Add(type);
             if (ctorInfo!=default)
             {
-                AttributeScript.AppendLine($"[{type.GetDevelopName()}({ctorInfo})]");
+                MemberAttributeScript.AppendLine($"[{type.GetDevelopName()}({ctorInfo})]");
             }
             else
             {
-                AttributeScript.AppendLine($"[{type.GetDevelopName()}]");
+                MemberAttributeScript.AppendLine($"[{type.GetDevelopName()}]");
             }
             return Link;
+
         }
+
+
+
 
         public override T Builder()
         {
+
             base.Builder();
-            _script.Append(AttributeScript);
+            _script.Append(MemberAttributeScript);
             return Link;
+
         }
+
     }
+
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace Natasha.Complier
 {
@@ -9,6 +8,13 @@ namespace Natasha.Complier
     public class MethodComplier : IComplier
     {
 
+        public MethodComplier()
+        {
+            UseMemoryComplie();
+        }
+
+
+
         /// <summary>
         /// 编译脚本，生成委托
         /// </summary>
@@ -16,27 +22,10 @@ namespace Natasha.Complier
         /// <param name="methodName">方法名</param>
         /// <param name="delegateType">委托类型</param>
         /// <returns></returns>
-        public Delegate Complie(string className, string content, string methodName, Type delegateType, object binder=null)
+        public virtual Delegate Complie(string className, string content, string methodName, Type delegateType, object binder = null)
         {
 
-            //获取程序集
-            Assembly assembly = GetAssemblyByScript(content);
-
-
-            //判空
-            if (assembly == null)
-            {
-
-                return null;
-
-            }
-
-
-            //获取方法委托
-            return AssemblyOperator
-                .Loader(assembly)[className]
-                .GetMethod(methodName)
-                .CreateDelegate(delegateType, binder);
+            return GetDelegateByScript(content, className, methodName, delegateType, binder);
 
         }
 
@@ -50,27 +39,10 @@ namespace Natasha.Complier
         /// <param name="methodName">方法名</param>
         /// <param name="delegateType">委托类型</param>
         /// <returns></returns>
-        public Delegate Complie<T>(string className, string content, string methodName, object binder)
+        public virtual T Complie<T>(string className, string content, string methodName, object binder = null) where T : Delegate
         {
 
-            //获取程序集
-            Assembly assembly = GetAssemblyByScript(content);
-
-
-            //判空
-            if (assembly == null)
-            {
-
-                return null;
-
-            }
-
-
-            //获取方法委托
-            return AssemblyOperator
-                .Loader(assembly)[className]
-                .GetMethod(methodName)
-                .CreateDelegate(typeof(T), binder);
+            return GetDelegateByScript<T>(content, className, methodName, binder);
 
         }
 

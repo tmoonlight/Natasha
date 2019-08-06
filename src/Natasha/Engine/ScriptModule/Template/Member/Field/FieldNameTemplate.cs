@@ -1,43 +1,46 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Natasha
+namespace Natasha.Template
 {
-    public class FieldNameTemplate<T>: MemberModifierTemplate<T>
+    public class FieldNameTemplate<T>: FieldTypeTemplate<T>
     {
-        public string FieldName;
 
-        public FieldNameTemplate()
-        {
-           
-        }
+        public string FieldNameScript;
 
 
-        public T Name(string name)
+        public T FieldName(string name)
         {
-            FieldName = name;
+
+            FieldNameScript = name;
             return Link;
+
         }
-        public T Name(Type type)
+
+
+
+
+        public T FieldName(MemberInfo info)
         {
-            FieldName = type.GetDevelopName();
+
+            FieldNameScript = info.Name;
             return Link;
+
         }
-        public T Name<S>()
-        {
-            return Name(typeof(S));
-        }
-        public T Name(MemberInfo info)
-        {
-            FieldName = info.Name;
-            return Link;
-        }
+
+
+
 
         public override T Builder()
         {
+
             base.Builder();
-            _script.Append(FieldName);
+            _script.Append(FieldNameScript);
+            _script.Append(';');
             return Link;
+
         }
+
     }
+
 }

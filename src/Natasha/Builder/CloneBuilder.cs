@@ -76,10 +76,10 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -105,11 +105,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using(info.ElementType)
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -136,11 +136,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using(info.ElementType)
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -178,11 +178,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using("System.Linq")
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -219,11 +219,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using("System.Linq")
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -278,11 +278,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using("System.Linq")
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -361,11 +361,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             CloneCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
                         .Using("System.Linq")
-                        .ClassName("NatashaClone" + info.DeclaringAvailableName)
+                        .OopName("NatashaClone" + info.DeclaringAvailableName)
                         .MethodName("Clone")
                         .Param(info.DeclaringType, "oldInstance")                 //参数
                         .MethodBody(scriptBuilder.ToString())                     //方法体
@@ -504,9 +504,9 @@ namespace Natasha
             {
 
                 //创建委托
-                MethodHandler.ComplierOption.UseFileComplie();
+                MethodHandler.Complier.UseFileComplie();
                 var @delegate = MethodHandler
-                            .ClassName("NatashaClone" + CurrentType.GetAvailableName())
+                            .OopName("NatashaClone" + CurrentType.GetAvailableName())
                             .MethodName("Clone")
                             .Param(CurrentType, OldInstance)                //参数
                             .MethodBody(Script.ToString())                  //方法体

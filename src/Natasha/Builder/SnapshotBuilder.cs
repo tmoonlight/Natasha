@@ -52,11 +52,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             tempBuilder.Using(info.ElementType).Using(info.DeclaringType).Using(typeof(HashSet<>)); ;
             SnapshotCache[info.ElementType] = tempBuilder
                         .Using("Natasha")
-                        .ClassName("NatashaSnapshot" + info.DeclaringAvailableName)
+                        .OopName("NatashaSnapshot" + info.DeclaringAvailableName)
                         .MethodName("Compare")
                         .Param(info.ElementType, OldInstance)
                         .Param(info.ElementType, NewInstance)
@@ -95,11 +95,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             tempBuilder.Using(info.ElementType).Using(info.DeclaringTypeName).Using(typeof(HashSet<>)); ;
             SnapshotCache[info.ElementType] = tempBuilder
                         .Using("Natasha")
-                        .ClassName("NatashaSnapshot" + info.DeclaringAvailableName)
+                        .OopName("NatashaSnapshot" + info.DeclaringAvailableName)
                         .MethodName("Compare")
                         .Param(info.ElementType, OldInstance)
                         .Param(info.ElementType, NewInstance)
@@ -201,11 +201,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             tempBuilder.Using(info.DeclaringType).Using(typeof(HashSet<>)); ;
             SnapshotCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
-                        .ClassName("NatashaSnapshot" + info.DeclaringAvailableName)
+                        .OopName("NatashaSnapshot" + info.DeclaringAvailableName)
                         .MethodName("Compare")
                         .Param(info.DeclaringType, OldInstance)
                         .Param(info.DeclaringType, NewInstance)
@@ -235,11 +235,11 @@ namespace Natasha
 
             //创建委托
             var tempBuilder = FastMethodOperator.New;
-            tempBuilder.ComplierOption.UseFileComplie();
+            tempBuilder.Complier.UseFileComplie();
             tempBuilder.Using(info.DeclaringType).Using(typeof(HashSet<>)); ;
             SnapshotCache[info.DeclaringType] = tempBuilder
                         .Using("Natasha")
-                        .ClassName("NatashaSnapshot" + info.DeclaringAvailableName)
+                        .OopName("NatashaSnapshot" + info.DeclaringAvailableName)
                         .MethodName("Compare")
                         .Param(info.DeclaringType, OldInstance)
                         .Param(info.DeclaringType, NewInstance)
@@ -340,9 +340,9 @@ namespace Natasha
         {
             TypeRouter(CurrentType);
             //创建委托
-            MethodHandler.ComplierOption.UseFileComplie();
+            MethodHandler.Complier.UseFileComplie();
             var @delegate = MethodHandler
-                        .ClassName("NatashaSnapshot" + CurrentType.GetAvailableName())
+                        .OopName("NatashaSnapshot" + CurrentType.GetAvailableName())
                         .MethodName("Compare")
                         .Param(CurrentType, NewInstance)
                         .Param(CurrentType, OldInstance)

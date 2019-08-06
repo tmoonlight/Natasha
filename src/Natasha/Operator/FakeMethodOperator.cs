@@ -1,4 +1,5 @@
 ﻿using Natasha.Builder;
+using Natasha.Template;
 using System;
 using System.Reflection;
 
@@ -9,7 +10,6 @@ namespace Natasha
     /// </summary>
     public class FakeMethodOperator : OnceMethodBuilder<FakeMethodOperator>
     {
-
 
         public Action<MethodTemplate> Action;
         private MethodInfo _temp_info;
@@ -24,7 +24,7 @@ namespace Natasha
 
             Link = this;
             HiddenNameSpace();
-            ClassAccess(AccessTypes.Public);
+            OopAccess(AccessTypes.Public);
 
         }
 
@@ -77,8 +77,10 @@ namespace Natasha
             }
 
 
+
             MethodAccess(_temp_info)
-            .Parameter(_temp_info)
+            .AsyncFrom(_temp_info)
+            .Param(_temp_info)
             .MethodBody(content)
             .Return(_temp_info);
 
@@ -106,10 +108,11 @@ namespace Natasha
             }
 
 
-            ClassModifier(Modifiers.Static)
+            OopModifier(Modifiers.Static)
+            .AsyncFrom(_temp_info)
             .MethodAccess(_temp_info)
             .MethodModifier(Modifiers.Static)
-            .Parameter(_temp_info)
+            .Param(_temp_info)
             .MethodBody(content)
             .Return(_temp_info);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Natasha.Template;
+using System;
 using System.Reflection;
 
 namespace Natasha
@@ -6,19 +7,20 @@ namespace Natasha
     /// <summary>
     /// 方法脚本构造器
     /// </summary>
-    public class MethodBuilder : IComplier
+    public class MethodBuilder
     {
 
 
-        public ClassBuilder ClassTemplate;
+        public OopBuilder ClassTemplate;
         public MethodTemplate MethodTemplate;
-
+        public OopComplier Complier;
 
         public MethodBuilder()
         {
 
-            ClassTemplate = new ClassBuilder();
+            ClassTemplate = new OopBuilder();
             MethodTemplate = new MethodTemplate();
+            Complier = new OopComplier(); 
 
         }
 
@@ -43,7 +45,7 @@ namespace Natasha
         /// </summary>
         /// <param name="classTemplate">新的类型模板</param>
         /// <returns></returns>
-        public virtual MethodBuilder ResetClassTemplate(ClassBuilder classTemplate)
+        public virtual MethodBuilder ResetClassTemplate(OopBuilder classTemplate)
         {
 
             ClassTemplate = classTemplate;
@@ -59,7 +61,7 @@ namespace Natasha
         /// </summary>
         /// <param name="classAction">类模板委托</param>
         /// <returns></returns>
-        public virtual MethodBuilder ClassAction(Action<ClassBuilder> classAction)
+        public virtual MethodBuilder ClassAction(Action<OopBuilder> classAction)
         {
 
             classAction(ClassTemplate);
@@ -104,33 +106,28 @@ namespace Natasha
         /// 编译并返回委托
         /// </summary>
         /// <returns></returns>
-        public Delegate Complie()
+        public Delegate Complie(object binder = null)
         {
-
-            //获取程序集
-            Assembly assembly = GetAssemblyByScript(
-                ClassTemplate
+            return Complier.GetDelegateByScript(ClassTemplate
                 .Using(MethodTemplate.UsingRecoder.Types)
-                .ClassBody(MethodTemplate.Builder()._script)
-                .Builder().Script
-                );
+                .OopBody(MethodTemplate.Builder()._script)
+                .Builder().Script,
+                ClassTemplate.OopNameScript,
+                MethodTemplate.MethodNameScript,
+                MethodTemplate.DelegateType,
+                binder);
 
+        }
 
-            //判空
-            if (assembly == null)
-            {
-
-                return null;
-
-            }
-
-
-            //获取方法委托
-            return AssemblyOperator
-                .Loader(assembly)[ClassTemplate.ClassNameScript]
-                .GetMethod(MethodTemplate.MethodNameScript)
-                .CreateDelegate(MethodTemplate.DelegateType);
-
+        public T Complie<T>(object binder=null) where T :Delegate
+        {
+            return Complier.GetDelegateByScript<T>(ClassTemplate
+                .Using(MethodTemplate.UsingRecoder.Types)
+                .OopBody(MethodTemplate.Builder()._script)
+                .Builder().Script,
+                ClassTemplate.OopNameScript,
+                MethodTemplate.MethodNameScript,
+                binder);
         }
 
     }

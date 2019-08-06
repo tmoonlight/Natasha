@@ -20,7 +20,7 @@ namespace Natasha.Complier
     /// <summary>
     /// 核心编译引擎
     /// </summary>
-    public class ScriptComplieEngine
+    public class ScriptComplierEngine
     {
 
 
@@ -29,9 +29,20 @@ namespace Natasha.Complier
         public readonly static ConcurrentDictionary<string, Assembly> DynamicDlls;
         public readonly static ConcurrentBag<PortableExecutableReference> References;
         private readonly static AdhocWorkspace _workSpace;
+        public readonly static string SplitChar;
 
-        static ScriptComplieEngine()
+        static ScriptComplierEngine()
         {
+
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                SplitChar = "\n";
+            }
+            else
+            {
+                SplitChar = "\r\n";
+            }
+
 
             _workSpace = new AdhocWorkspace();
             _workSpace.AddSolution(SolutionInfo.Create(SolutionId.CreateNewId("formatter"), VersionStamp.Default));
@@ -86,7 +97,7 @@ namespace Natasha.Complier
         public static (SyntaxTree Tree, string[] ClassNames, string formatter) GetTreeAndClassNames(string content)
         {
 
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(content);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(content,new CSharpParseOptions(LanguageVersion.Latest));
             CompilationUnitSyntax root = tree.GetCompilationUnitRoot();
 
 
@@ -114,14 +125,14 @@ namespace Natasha.Complier
         /// <summary>
         /// 使用内存流进行脚本编译
         /// </summary>
-        /// <param name="content">脚本内容</param>
+        /// <param name="sourceContent">脚本内容</param>
         /// <param name="errorAction">发生错误执行委托</param>
         /// <returns></returns>
-        public static Assembly StreamComplier(string content, Action<Diagnostic> errorAction = null)
+        public static Assembly StreamComplier(string sourceContent,out string formatContent, Action<Diagnostic> errorAction = null)
         {
 
-            content = content.Trim();
-            var (Tree, ClassName, formatter) = GetTreeAndClassNames(content);
+            var (Tree, ClassName, formatter) = GetTreeAndClassNames(sourceContent.Trim());
+            formatContent = formatter;
             StringBuilder recoder = new StringBuilder(formatter);
 
 
@@ -208,7 +219,6 @@ namespace Natasha.Complier
 
             }
 
-
             return null;
 
         }
@@ -237,15 +247,15 @@ namespace Natasha.Complier
         /// <summary>
         /// 使用文件流进行脚本编译，根据类名生成dll
         /// </summary>
-        /// <param name="content">脚本内容</param>
+        /// <param name="sourceContent">脚本内容</param>
         /// <param name="errorAction">发生错误执行委托</param>
         /// <returns></returns>
-        public static Assembly FileComplier(string content, Action<Diagnostic> errorAction = null)
+        public static Assembly FileComplier(string sourceContent, out string formatContent, Action<Diagnostic> errorAction = null)
         {
 
             //类名获取
-            content = content.Trim();
-            var (Tree, ClassNames, formatter) = GetTreeAndClassNames(content);
+            var (Tree, ClassNames, formatter) = GetTreeAndClassNames(sourceContent.Trim());
+            formatContent = formatter;
             StringBuilder recoder = new StringBuilder(FormatLineCode(formatter));
 
 
@@ -253,7 +263,7 @@ namespace Natasha.Complier
             string path = Path.Combine(LibPath, $"{ClassNames[0]}.dll");
             if (DynamicDlls.ContainsKey(path))
             {
-
+                
                 return DynamicDlls[path];
 
             }
@@ -345,7 +355,7 @@ namespace Natasha.Complier
 
                 }
 
-
+                formatContent = formatter;
                 return null;
             }
             catch (Exception ex)
@@ -362,8 +372,6 @@ namespace Natasha.Complier
                         loop += 1;
 
                     }
-
-
                     NScriptLog.Warning(ClassNames[0], $"    I/O Delay :\t检测到争用，延迟{loop * 200}ms调用;\r\n");
 
 
@@ -382,7 +390,7 @@ namespace Natasha.Complier
         {
 
             StringBuilder sb = new StringBuilder();
-            var arrayLines = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            var arrayLines = content.Split(new string[] { SplitChar }, StringSplitOptions.None);
             for (int i = 0; i < arrayLines.Length; i+=1)
             {
 
@@ -401,7 +409,7 @@ namespace Natasha.Complier
             var end = linePositionSpan.EndLinePosition;
 
 
-            var arrayLines = content.Split(new string[] { "\r" }, StringSplitOptions.None);
+            var arrayLines = content.Split(new string[] { SplitChar }, StringSplitOptions.None);
             var currentErrorLine = arrayLines[start.Line];
 
 

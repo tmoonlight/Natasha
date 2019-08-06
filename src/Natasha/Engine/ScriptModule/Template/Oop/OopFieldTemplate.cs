@@ -2,17 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Natasha
+namespace Natasha.Template
 {
-    public class FieldTemplate<T>:InheritanceTemplate<T>
+    public class OopFieldTemplate<T>:InheritanceTemplate<T>
     {
-        public readonly StringBuilder FieldScript;
+        public readonly StringBuilder OopFieldScript;
         internal readonly HashSet<string> _fieldsSet;
 
-        public FieldTemplate()
+        public OopFieldTemplate()
         {
-            FieldScript = new StringBuilder();
+            OopFieldScript = new StringBuilder();
             _fieldsSet = new HashSet<string>();
+        }
+
+
+
+        public T CreateFiled(Action<FieldNameTemplate<T>> action)
+        {
+            var handler = new FieldNameTemplate<T>();
+            action?.Invoke(handler);
+            handler.Builder();
+            OopFieldScript.Append(handler._script);
+            return Link;
         }
 
 
@@ -25,12 +36,12 @@ namespace Natasha
         /// <param name="type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public T Field(string access, Type type, string name)
+        public T CreateField(string access, Type type, string name)
         {
             Using(type);
             if (!_fieldsSet.Contains(name))
             {
-                FieldScript.Append($"{access} {type.GetDevelopName()} {name};");
+                OopFieldScript.Append($"{access} {type.GetDevelopName()} {name};");
             }
             return Link;
         }
@@ -38,7 +49,7 @@ namespace Natasha
         public override T Builder()
         {
             base.Builder();
-            _script.Append(FieldScript);
+            _script.Append(OopFieldScript);
             return Link;
         }
 
@@ -49,7 +60,7 @@ namespace Natasha
 
         public T PublicField(Type type, string name)
         {
-            return Field("public", type, name);
+            return CreateField("public", type, name);
         }
 
         public T PrivateField<S>(string name)
@@ -59,7 +70,7 @@ namespace Natasha
 
         public T PrivateField(Type type, string name)
         {
-            return Field("private", type, name);
+            return CreateField("private", type, name);
         }
 
         public T InternalField<S>(string name)
@@ -69,7 +80,7 @@ namespace Natasha
 
         public T InternalField(Type type, string name)
         {
-            return Field("internal", type, name);
+            return CreateField("internal", type, name);
         }
 
         public T ProtectedField<S>(string name)
@@ -79,7 +90,7 @@ namespace Natasha
 
         public T ProtectedField(Type type, string name)
         {
-            return Field("protected", type, name);
+            return CreateField("protected", type, name);
         }
 
         public T PublicStaticField<S>(string name)
@@ -89,7 +100,7 @@ namespace Natasha
 
         public T PublicStaticField(Type type, string name)
         {
-            return Field("public static", type, name);
+            return CreateField("public static", type, name);
         }
 
         public T PrivateStaticField<S>(string name)
@@ -99,7 +110,7 @@ namespace Natasha
 
         public T PrivateStaticField(Type type, string name)
         {
-            return Field("private static", type, name);
+            return CreateField("private static", type, name);
         }
 
         public T InternalStaticField<S>(string name)
@@ -109,7 +120,7 @@ namespace Natasha
 
         public T InternalStaticField(Type type, string name)
         {
-            return Field("internal static", type, name);
+            return CreateField("internal static", type, name);
         }
 
         public T ProtectedStaticField<S>(string name)
@@ -119,7 +130,9 @@ namespace Natasha
 
         public T ProtectedStaticField(Type type, string name)
         {
-            return Field("protected static", type, name);
+            return CreateField("protected static", type, name);
         }
+
     }
+
 }

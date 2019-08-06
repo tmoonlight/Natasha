@@ -41,13 +41,19 @@
 
 <br/>    
 
+### Wiki审核
+
+Teng(359768998@qq.com)
+
+<br/>    
 
 ### 发布计划(Publish Plan)  
 
- - 2019-06-25 ： 发布v0.7.1.2, 修复跨平台调用，将object类型纳入一次性赋值类型，增加类扩展方法。   
- - 2019-06-26 ： 发布v0.7.2.0, 升级到Standard的程序集操作，并指定release模式进行编译。  
  - 2019-08-01 ： 发布v1.0.0.0, 发布稳如老狗版，抛弃Emit农耕铲，端起Roslyn金饭碗。  
- 
+ - 2019-08-02 ： 发布v1.0.4.0，支持异步方法还原与构造，增加注解构建。
+ - 2019-08-04 ： 发布v1.1.0.0，优化编译引擎，区分OS字符，增加异常捕获。
+ - 2019-08-05 ： 发布v1.2.0.0，支持类/结构体/接口的编译，支持字段模板，增加string扩展。
+
  <br/>  
  
  ### 升级日志
@@ -75,6 +81,27 @@
 <br/>
 <br/> 
 
+#### 异常捕获方法：
+
+```C#
+  var fastBuilder = FastMethodOperator.New;
+  fastBuilder.Complier.Exception;             //编译后异常会进入这里
+  if(fastBuilder.Complier.Exception.ErrorFlag == ComplieError.None) 
+  {
+        //编译成功！
+  }
+  
+  
+  var fakeBuilder = FakeMethodOpeartor.New;
+  fakeBuilder.Complier.Exception;
+  
+  
+  var classBuilder = New ClassBuilder();
+  classBuilder.Complier.Exception;
+  
+```  
+<br/>
+<br/> 
 
 #### 使用 FastMethodOperator 快速构建函数：  
   
@@ -84,10 +111,36 @@ var action = FastMethodOperator.New
              .Param<string>("str1")
              .Param(typeof(string),"str2")
              .MethodBody("return str1+str2;")
-             .Return<string>()
+             .Return<Task<string>>()
              .Complie<Func<string,string,string>>();
                     
-string result = action("Hello ","World!");    //result:   "Hello World!"
+var result = action("Hello ","World!");    //result:   "Hello World!"
+
+
+//增强实现与异步支持
+
+
+//Complie<T>方法会检测参数以及返回类型，如果其中有任何一处没有指定，那么Complie方法会使用自己默认的参数或者返回值进行填充
+//如果是Action<int> 这种带有1个参数的，请使用"arg"
+
+
+var delegateAction = FastMethodOperator.New
+
+       .UseAsync()
+       .MethodBody(@"
+               await Task.Delay(100);
+               string result = arg1 +"" ""+ arg2; 
+               Console.WriteLine(result);
+               return result;")
+               
+       .Complie<Func<string, string, Task<string>>>();
+      
+string result = await delegateAction?.Invoke("Hello", "World2!");   //result:   "Hello World2!"
+
+
+//另外如果想使用异步方法，请使用UseAsync方法,或者AsyncFrom<Class>(methodName)这两种方法。
+//返回的参数需要您指定Task<>,以便运行时异步调用，记得外面那层方法要有async关键字哦。
+
 ```
 <br/>
 <br/>  
@@ -98,9 +151,12 @@ string result = action("Hello ","World!");    //result:   "Hello World!"
 //定义一个委托
 public delegate string GetterDelegate(int value);
      
+     
+     
 //方法一     
 var action = DelegateOperator<GetterDelegate>.Create("value += 101; return value.ToString();");
 string result = action(1);              //result: "102"
+
 
 
 //方法二
@@ -195,6 +251,16 @@ Example:
         var action = typeof(AddOne).Create("return value + 1;");
         var result = action(9);
         //result : 10
+        
+        
+        //使用方法扩展快速动态构建委托
+         @"string result = str1 +"" ""+ str2;
+           Console.WriteLine(result);
+           return result;".FastOperator()
+               .Param<string>("str1")
+               .Param<string>("str2")
+               .Return<string>()
+               .Complie<Func<string, string, string>>()
 ```
 <br/>
 <br/>    

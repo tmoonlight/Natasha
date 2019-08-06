@@ -41,12 +41,19 @@ Make your dynamic approach easier to write, track, and maintain.  Welcome to dis
 
 <br/>    
 
+### Wiki Review  
 
+Teng(359768998@qq.com)  
+
+ 
+ <br/>  
+ 
 ### Publish Plan  
 
- - 2019-06-25 ： Published v0.7.1.2, Fix cross-platform calls, incorporate object types into one-time assignment types, and add class extension methods.   
- - 2019-06-26 ： Published v0.7.2.0, Upgrade to the assembly operation of Standard2.0 and specify the release mode to compile.  
  - 2019-08-01 ： Publish v1.0.0.0, The first official stable version.  
+ - 2019-08-02 ： Publish v1.0.4.0，Support asynchronous methods, support attributes.
+ - 2019-08-04 ： Publish v1.1.0.0，Optimize the compilation engine, distinguish OS characters, and increase exception capture.
+ - 2019-08-05 ： Publish v1.2.0.0，Support for compiling class/interface/struct, add FieldTemplate, add string extension method.  
  
  <br/>  
  
@@ -70,6 +77,29 @@ Make your dynamic approach easier to write, track, and maintain.  Welcome to dis
 <br/> 
 
 
+#### Catch exception：
+
+```C#
+  var fastBuilder = FastMethodOperator.New;
+  fastBuilder.Complier.Exception;             
+  if(fastBuilder.Complier.Exception.ErrorFlag == ComplieError.None) 
+  {
+        //Compiled successfully!
+  }
+  
+  
+  var fakeBuilder = FakeMethodOpeartor.New;
+  fakeBuilder.Complier.Exception;
+  
+  
+  var classBuilder = New ClassBuilder();
+  classBuilder.Complier.Exception;
+  
+```  
+<br/>
+<br/> 
+
+
 #### Using FastMethodOperator to build dynamic functions quickly：  
   
   
@@ -82,6 +112,32 @@ var action = FastMethodOperator.New
              .Complie<Func<string,string,string>>();
                     
 string result = action("Hello ","World!");    //result:   "Hello World!"
+
+
+
+
+//Enhanced implementation and asynchronous support
+
+
+//Complie<T> ： This method detects the parameters and the return type, and if any of them is not specified, the Complie method populates it with its own default parameter or return value
+//If it is a Action < int > with 1 parameter, use "arg".
+var delegateAction = FastMethodOperator.New
+
+       .UseAsync()
+       .MethodBody(@"
+               await Task.Delay(100);
+               string result = arg1 +"" ""+ arg2;  
+               Console.WriteLine(result);
+               return result;")
+
+       .Complie<Func<string, string, Task<string>>>();
+  
+string result = await delegateAction?.Invoke("Hello", "World2!");   //result:   "Hello World2!"
+
+
+//If you want to use asynchronous methods, use either the UseAsync method or the AsyncFrom<Class>(methodName) method.
+//The returned parameter requires you to specify Task < >. Remember that the outer layer method should have the async keyword.
+
 ```
 <br/>
 <br/>  
@@ -89,12 +145,16 @@ string result = action("Hello ","World!");    //result:   "Hello World!"
 #### Fast implementation of delegation using DelegateOperator：  
 
 ```C# 
+
 //Define a delegate
 public delegate string GetterDelegate(int value);
+     
+     
      
 //Usage 1    
 var action = DelegateOperator<GetterDelegate>.Create("value += 101; return value.ToString();");
 string result = action(1);              //result: "102"
+
 
 
 //Usage 2
@@ -187,7 +247,18 @@ Example:
         var action = typeof(AddOne).Create("return value + 1;");
         var result = action(9);
         //result : 10
+
+
+        //use string exntesion method.
+         @"string result = str1 +"" ""+ str2;
+           Console.WriteLine(result);
+           return result;".FastOperator()
+               .Param<string>("str1")
+               .Param<string>("str2")
+               .Return<string>()
+               .Complie<Func<string, string, string>>()
 ```
+
 <br/>
 <br/>    
  

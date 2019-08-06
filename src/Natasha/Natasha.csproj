@@ -3,14 +3,17 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;</TargetFrameworks>
     <Product>Natasha</Product>
-    <Description>使用roslyn方案打造高性能动态代码，包括动态构建，动态调用，深度克隆，实体快照，远程调用等。（Use Roslyn to create efficient dynamic code. Including dynamic build, dynamic call, deep clone, entity snapshot, remote call and so on.）</Description>
+    <Description>使用roslyn方案打造高性能动态代码，包括动态构建，深度克隆，实体快照等。（Use Roslyn to create efficient dynamic code. Including dynamic build, deep clone, entity snapshot, and so on.）</Description>
     <Copyright>.NET Core Community and Contributors</Copyright>
     <PackageId>DotNetCore.Natasha</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>- 增强日志
-- 增加类模板重编译功能
-- 修复克隆扩展类型</PackageReleaseNotes>
-    <Version>1.0.0</Version>
+    <PackageReleaseNotes>- 增加字符串扩展方法，FastOperator.
+- 修改Class操作为Oop操作，例如ClassBuilder -&gt; OopBuilder。
+- 优化模板结构。
+- Oop模板支持类、结构体、接口多种构建方式。
+- 增加字段模板。
+- FastMethodOperator的Complie&lt;&gt;方法增加智能参数/返回值检测/补齐。</PackageReleaseNotes>
+    <Version>1.2.0</Version>
     <PackageLicenseUrl>https://github.com/dotnetcore/Natasha/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/dotnetcore/Natasha</PackageProjectUrl>
     <PackageTags>Roslyn ; IL ; Scripte ; Dynamic ; </PackageTags>
@@ -18,8 +21,8 @@
     <Company>.NET Core Community</Company>
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/19404084</PackageIconUrl>
     <Authors>NMSAzulX</Authors>
-    <FileVersion>1.0.0.0</FileVersion>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
   </PropertyGroup>
 
 

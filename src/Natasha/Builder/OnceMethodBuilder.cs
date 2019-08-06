@@ -1,4 +1,5 @@
 ﻿using Natasha.Complier;
+using Natasha.Template;
 using System;
 
 namespace Natasha.Builder
@@ -12,20 +13,20 @@ namespace Natasha.Builder
 
 
         //使用默认编译器
-        public MethodComplier ComplierOption;
-        public OnceMethodBuilder() => ComplierOption = new MethodComplier();
+        public MethodComplier Complier;
+        public OnceMethodBuilder() => Complier = new MethodComplier();
 
 
         /// <summary>
         /// 编译返回委托
         /// </summary>
         /// <returns></returns>
-        public Delegate Complie(object binder = null)
+        public virtual Delegate Complie(object binder = null)
         {
 
             Builder();
-            return ComplierOption.Complie(
-                ClassNameScript,
+            return Complier.Complie(
+                OopNameScript,
                 Script,
                 MethodNameScript,
                 DelegateType,
@@ -41,14 +42,14 @@ namespace Natasha.Builder
         /// </summary>
         /// <typeparam name="T">委托的强类型</typeparam>
         /// <returns></returns>
-        public T Complie<T>(object binder=null) where T : Delegate
+        public virtual T Complie<T>(object binder=null) where T : Delegate
         {
 
             Builder();
 
 
-            return (T)ComplierOption.Complie<T>(
-                ClassNameScript,
+            return Complier.Complie<T>(
+                OopNameScript,
                 Script,
                 MethodNameScript,
                 binder);
